@@ -2,6 +2,7 @@ package com.kylethompson.gifsearch
 
 import android.app.Application
 import com.kylethompson.gifsearch.di.appModule
+import com.kylethompson.gifsearch.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,7 +18,7 @@ class GifSearchApp : Application() {
         startKoin {
             androidLogger(level = if (BuildConfig.DEBUG) Level.DEBUG else Level.NONE)
             androidContext(this@GifSearchApp)
-            modules(appModule)
+            modules(appModule, viewModelModule)
         }
 
         Timber.plant(DebugTree())

@@ -8,15 +8,14 @@ import java.io.IOException
 
 class GifPagingSource(
     private val apiService: TenorApiService,
-    private val query: String,
-    private val pageSize: Int = 10
+    private val query: String
 ) : PagingSource<String, Gif>() {
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, Gif> {
         try {
             val response = apiService.getGifs(
                 searchTerm = query,
-                limit = pageSize,
+                limit = params.loadSize,
                 pos = params.key
             )
 
