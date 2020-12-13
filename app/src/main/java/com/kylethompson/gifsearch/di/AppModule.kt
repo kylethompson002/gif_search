@@ -1,7 +1,7 @@
 package com.kylethompson.gifsearch.di
 
 import com.kylethompson.gifsearch.BuildConfig
-import com.kylethompson.gifsearch.api.TenorApi
+import com.kylethompson.gifsearch.api.TenorApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
@@ -26,11 +26,11 @@ private fun createOkHttpClient(): OkHttpClient {
         .build()
 }
 
-private fun createApi(okHttpClient: OkHttpClient): TenorApi {
+private fun createApi(okHttpClient: OkHttpClient): TenorApiService {
     return Retrofit.Builder()
         .client(okHttpClient)
         .baseUrl("https://api.tenor.com")
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
-        .create(TenorApi::class.java)
+        .create(TenorApiService::class.java)
 }

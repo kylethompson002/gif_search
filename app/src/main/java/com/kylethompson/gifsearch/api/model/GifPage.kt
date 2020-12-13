@@ -4,6 +4,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class GifPage(
-    val results: List<ResultItem>,
+    val results: List<Gif>,
     val next: String
 )
