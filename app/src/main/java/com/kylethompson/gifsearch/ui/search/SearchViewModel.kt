@@ -1,5 +1,6 @@
-package com.kylethompson.gifsearch.ui
+package com.kylethompson.gifsearch.ui.search
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,22 +14,29 @@ import com.kylethompson.gifsearch.data.GifPagingSource
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class GifListViewModel(
+class SearchViewModel(
     private val apiService: TenorApiService
 ) : ViewModel() {
 
-    val gifPageLiveData = MutableLiveData<PagingData<Gif>>()
+    private val _gifPageLiveData = MutableLiveData<PagingData<Gif>>()
+    val gifPages: LiveData<PagingData<Gif>> = _gifPageLiveData
 
-    fun search(query: String) {
+    fun process(event: SearchViewEvent) {
+        when (event) {
+            is SearchViewEvent.Search -> search(event.query)
+        }
+    }
+
+    private fun search(query: String) {
         viewModelScope.launch {
             getGifPager(query)
                 .flow.cachedIn(viewModelScope)
                 .collect {
-                    gifPageLiveData.value = it
+                    _gifPageLiveData.value = it
                 }
         }
     }
-    
+
     private fun getGifPager(query: String): Pager<String, Gif> {
         return Pager(
             // Configure how data is loaded by passing additional properties to
