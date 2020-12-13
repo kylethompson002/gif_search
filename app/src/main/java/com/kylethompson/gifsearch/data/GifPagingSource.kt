@@ -3,7 +3,8 @@ package com.kylethompson.gifsearch.data
 import androidx.paging.PagingSource
 import com.kylethompson.gifsearch.api.TenorApiService
 import com.kylethompson.gifsearch.api.model.Gif
-import timber.log.Timber
+import retrofit2.HttpException
+import java.io.IOException
 
 class GifPagingSource(
     private val apiService: TenorApiService,
@@ -25,8 +26,11 @@ class GifPagingSource(
                 nextKey = response.next
             )
 
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to load gif page!")
+        } catch (e: IOException) {
+            // IOException for network failures.
+            return LoadResult.Error(e)
+        } catch (e: HttpException) {
+            // HttpException for any non-2xx HTTP status codes.
             return LoadResult.Error(e)
         }
     }
