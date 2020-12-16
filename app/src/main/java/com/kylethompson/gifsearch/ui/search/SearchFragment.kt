@@ -43,7 +43,10 @@ class SearchFragment : Fragment() {
                 StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL).apply {
                     gapStrategy = GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
                 }
-            adapter = gifAdapter
+            adapter = gifAdapter.withLoadStateHeaderAndFooter(
+                header = GifsLoadStateAdapter { gifAdapter.retry() },
+                footer = GifsLoadStateAdapter { gifAdapter.retry() }
+            )
         }
 
         viewModel.searchResults.observe(viewLifecycleOwner) {

@@ -45,7 +45,7 @@ class SearchViewModel(
     private fun getSearchResultStream(query: String): Flow<PagingData<Gif>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10,
+                pageSize = 15,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { GifPagingSource(apiService = apiService, query = query) }
