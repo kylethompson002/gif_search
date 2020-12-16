@@ -9,6 +9,7 @@ import com.kylethompson.gifsearch.api.TenorApiService
 import com.kylethompson.gifsearch.api.model.Gif
 import com.kylethompson.gifsearch.data.GifPagingSource
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 
 class SearchViewModel(
@@ -17,10 +18,11 @@ class SearchViewModel(
 
     private val searchInputFlow = MutableStateFlow("")
 
-
-    val gifPages = searchInputFlow.flatMapLatest { query ->
-        getGifPager(query).flow
-    }.cachedIn(viewModelScope)
+    val gifPages = searchInputFlow
+        .debounce(500L)
+        .flatMapLatest { query ->
+            getGifPager(query).flow
+        }.cachedIn(viewModelScope)
 
     fun process(event: SearchViewEvent) {
         when (event) {

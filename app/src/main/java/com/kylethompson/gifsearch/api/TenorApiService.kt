@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface TenorApiService {
 
-    @GET("/v1/search?q=excited&key=LIVDSRZULELA&limit=8&pos=8")
+    @GET("/v1/search")
     suspend fun getGifs(
         @Query("q") searchTerm: String,
         @Query("limit") limit: Int,

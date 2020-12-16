@@ -24,7 +24,7 @@ class SearchAdapter : PagingDataAdapter<Gif, GifViewHolder>(GifDiffCallback()) {
 class GifViewHolder(private val binding: ItemGifBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(gif: Gif) {
         Glide.with(itemView.context)
-            .load(gif.media.first().tinyGif?.previewUrl)
+            .load(gif.media.first().tinyGif.previewUrl)
             .into(binding.image)
 
         binding.title.text = gif.title
