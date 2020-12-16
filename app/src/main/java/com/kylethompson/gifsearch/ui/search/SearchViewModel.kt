@@ -29,7 +29,7 @@ class SearchViewModel(
     init {
         viewModelScope.launch {
             _searchInput
-                .debounce(500)
+                .debounce(250)
                 .flatMapLatest { getSearchResultStream(it) }
                 .cachedIn(viewModelScope)
                 .collectLatest {

@@ -28,8 +28,7 @@ class SearchAdapter : PagingDataAdapter<Gif, GifViewHolder>(GifDiffCallback()) {
 class GifViewHolder(private val binding: ItemGifBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(gif: Gif) {
-        bindMediaItem(gif.media.first().gif)
-        binding.title.text = gif.title
+        bindMediaItem(gif.media.first().tinyGif)
     }
 
     private fun bindMediaItem(item: MediaItem) {

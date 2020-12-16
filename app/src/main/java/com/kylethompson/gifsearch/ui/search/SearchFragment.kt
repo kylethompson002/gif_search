@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 import com.kylethompson.gifsearch.databinding.FragmentSearchBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -38,7 +39,10 @@ class SearchFragment : Fragment() {
         }
 
         binding.gifRecycler.apply {
-            layoutManager = LinearLayoutManager(view.context)
+            layoutManager =
+                StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL).apply {
+                    gapStrategy = GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+                }
             adapter = gifAdapter
         }
 
