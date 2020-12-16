@@ -32,10 +32,11 @@ class GifViewHolder(private val binding: ItemGifBinding) : RecyclerView.ViewHold
     }
 
     private fun bindMediaItem(item: MediaItem) {
+
+        val ratio = "${item.dimensions[0]}:${item.dimensions[1]}"
         with(binding.image) {
             updateLayoutParams<ConstraintLayout.LayoutParams> {
-                width = item.dimensions[0]
-                height = item.dimensions[1]
+                dimensionRatio = ratio
             }
             Glide.with(this.context)
                 .load(item.url)
