@@ -4,43 +4,39 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.kylethompson.gifsearch.api.TenorApiService
 import com.kylethompson.gifsearch.api.model.Gif
 import com.kylethompson.gifsearch.data.GifPagingSource
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.Flow
 
 class SearchViewModel(
     private val apiService: TenorApiService
 ) : ViewModel() {
 
-    private val searchInputFlow = MutableStateFlow("")
+    private var currentQueryValue: String? = null
+    private var currentSearchResult: Flow<PagingData<Gif>>? = null
 
-    val gifPages = searchInputFlow
-        .debounce(500L)
-        .flatMapLatest { query ->
-            getGifPager(query).flow
-        }.cachedIn(viewModelScope)
-
-    fun process(event: SearchViewEvent) {
-        when (event) {
-            is SearchViewEvent.Search -> search(event.query)
+    fun searchGifs(queryString: String): Flow<PagingData<Gif>> {
+        val lastResult = currentSearchResult
+        if (queryString == currentQueryValue && lastResult != null) {
+            return lastResult
         }
+        currentQueryValue = queryString
+        val newResult: Flow<PagingData<Gif>> = getSearchResultStream(queryString)
+            .cachedIn(viewModelScope)
+        currentSearchResult = newResult
+        return newResult
     }
 
-    private fun search(query: String) {
-        searchInputFlow.value = query
-    }
-
-    private fun getGifPager(query: String): Pager<String, Gif> {
+    private fun getSearchResultStream(query: String): Flow<PagingData<Gif>> {
         return Pager(
-            // Configure how data is loaded by passing additional properties to
-            // PagingConfig, such as prefetchDistance.
-            PagingConfig(pageSize = 10)
-        ) {
-            GifPagingSource(apiService = apiService, query = query)
-        }
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { GifPagingSource(apiService = apiService, query = query) }
+        ).flow
     }
 }
