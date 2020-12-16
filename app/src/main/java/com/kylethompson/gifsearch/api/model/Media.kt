@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Media(
-    val tinyGif: MediaItem,
+    val tinyGif: MediaItem?,
     val gif: MediaItem,
     val mp4: MediaItem
 )
